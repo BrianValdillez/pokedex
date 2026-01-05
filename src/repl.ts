@@ -4,14 +4,19 @@ export function startREPL(state: State){
 
     const rl = state.interface;
 
-    rl.on('line', (line:string) => {
+    rl.on('line', async (line:string) => {
         const args = cleanInput(line);
         const commands = state.commands;
 
         if (args.length > 0){
             const cmd = args[0];
             if (cmd in commands){
-                commands[cmd].callback(state);
+                try {
+                    await commands[cmd].callback(state);
+                } catch (error){
+                    console.log("Network error!");
+                }
+                
                 rl.prompt();
                 return;
             }   
