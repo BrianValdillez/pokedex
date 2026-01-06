@@ -56,7 +56,7 @@ export function initState(): State {
         interface: rli,
         commands: getCommands(),
 
-        pokeapi: new PokeAPI(),
+        pokeapi: new PokeAPI(1000 * 30),
         nextLocationsURL: undefined,
         prevLocationsURL: undefined,
     };
