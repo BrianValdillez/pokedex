@@ -106,11 +106,21 @@ export type PokemonLookupData = {
   url: string;
 };
 
+export type LookupData = {
+  name: string;
+  url: string;
+};
+
 export type PokemonData = {
   id: number;
   name: string;
 
   base_experience: number;
+  height: number;
+  weight: number;
+
+  types: { slot: number, type: LookupData }[];
+  stats: { base_stat: number; effort: number; stat:LookupData }[];
 };
 /*
 export type Location = {

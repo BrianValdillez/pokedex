@@ -1,7 +1,5 @@
 import type { State } from './state.js';
 
-
-
 export async function commandCatch(state:State, pkmnName: string): Promise<void>{
 
     pkmnName = pkmnName.toLowerCase();
