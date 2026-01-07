@@ -11,6 +11,7 @@ export class PokeAPI {
     if (pageURL === undefined){
         pageURL = `${PokeAPI.BASE_URL}/location-area/`;
     }
+    pageURL = pageURL.toLowerCase();
 
     const cachedJson = this.cache.get<ShallowLocations>(pageURL);
     if (cachedJson !== undefined){
@@ -26,10 +27,33 @@ export class PokeAPI {
   }
 
   async fetchLocationArea(locationName: string): Promise<LocationArea | undefined> {
-    const pageURL = `${PokeAPI.BASE_URL}/location-area/${locationName}`;
+    const pageURL = `${PokeAPI.BASE_URL}/location-area/${locationName}`.toLowerCase();
 
     // Check cache
     const cachedData = this.cache.get<LocationArea>(pageURL);
+    if (cachedData !== undefined){
+      return cachedData;
+    }
+
+    // Retrieve + cache
+    try{
+      const response = await fetch(pageURL);
+      const data = response.json();
+      this.cache.add(pageURL, data);
+      return data;
+    }catch(error){
+      if (error instanceof Error){
+        console.log(error.message);
+      }
+      return undefined;
+    }
+  }
+
+  async fetchPokemonData(pokemonName: string): Promise<PokemonData | undefined> {
+    const pageURL = `${PokeAPI.BASE_URL}/pokemon/${pokemonName}`.toLowerCase();
+
+    // Check cache
+    const cachedData = this.cache.get<PokemonData>(pageURL);
     if (cachedData !== undefined){
       return cachedData;
     }
@@ -80,6 +104,13 @@ export type PokemonEncounter = {
 export type PokemonLookupData = {
   name: string;
   url: string;
+};
+
+export type PokemonData = {
+  id: number;
+  name: string;
+
+  base_experience: number;
 };
 /*
 export type Location = {
