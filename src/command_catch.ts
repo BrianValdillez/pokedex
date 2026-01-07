@@ -23,5 +23,6 @@ export async function commandCatch(state:State, pkmnName: string): Promise<void>
     }
 
     state.pokedex[pkmnName] = pkmnData;
-    console.log(`${pkmnName} was caught!`)
+    console.log(`${pkmnName} was caught!`);
+    console.log("You may now inspect it with the inspect command.");
 }
