@@ -4,11 +4,12 @@ import { PokeAPI } from './pokeapi.js';
 import { commandExit } from './command_exit.js';
 import { commandHelp } from './command_help.js';
 import { commandMap, commandMapBack } from './command_map.js';
+import { commandExplore } from './command_explore.js';
 
 export type CLICommand = {
     name: string;
     description: string;
-    callback: (state: State) => Promise<void>
+    callback: (state: State, ...args: string[]) => Promise<void>
 };
 
 export type State = {
@@ -41,7 +42,12 @@ function getCommands(): Record<string, CLICommand> {
             name: "mapb",
             description: "Move back in the map list",
             callback: commandMapBack,
-        }
+        },
+        explore: {
+            name: "explore",
+            description: "Explore a given location",
+            callback: commandExplore,
+        },
     };
 }
 
@@ -56,7 +62,7 @@ export function initState(): State {
         interface: rli,
         commands: getCommands(),
 
-        pokeapi: new PokeAPI(1000 * 30),
+        pokeapi: new PokeAPI(1000 * 30), // TODO: Change number????
         nextLocationsURL: undefined,
         prevLocationsURL: undefined,
     };

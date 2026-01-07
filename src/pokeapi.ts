@@ -24,11 +24,29 @@ export class PokeAPI {
     this.cache.add(pageURL, json);
     return json;
   }
-/*
-  async fetchLocation(locationName: string): Promise<Location> {
-    // implement this
+
+  async fetchLocationArea(locationName: string): Promise<LocationArea | undefined> {
+    const pageURL = `${PokeAPI.BASE_URL}/location-area/${locationName}`;
+
+    // Check cache
+    const cachedData = this.cache.get<LocationArea>(pageURL);
+    if (cachedData !== undefined){
+      return cachedData;
+    }
+
+    // Retrieve + cache
+    try{
+      const response = await fetch(pageURL);
+      const data = response.json();
+      this.cache.add(pageURL, data);
+      return data;
+    }catch(error){
+      if (error instanceof Error){
+        console.log(error.message);
+      }
+      return undefined;
+    }
   }
-    */
 }
 
 // Location List Response
@@ -51,7 +69,17 @@ export type LocationArea = {
     //encounter_method_rates
     location: Location;
     names: string[];
-    //pokemon_encounters: Encounter[]
+    pokemon_encounters: PokemonEncounter[]
+};
+
+export type PokemonEncounter = {
+  pokemon: PokemonLookupData;
+};
+
+// This name + url combo is used in a couple of places; could consolidate into a single type
+export type PokemonLookupData = {
+  name: string;
+  url: string;
 };
 /*
 export type Location = {

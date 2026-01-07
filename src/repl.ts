@@ -12,7 +12,7 @@ export function startREPL(state: State){
             const cmd = args[0];
             if (cmd in commands){
                 try {
-                    await commands[cmd].callback(state);
+                    await commands[cmd].callback(state, ...(args.slice(1)));
                 } catch (error){
                     console.log("Network error!");
                 }
